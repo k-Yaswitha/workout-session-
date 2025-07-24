@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FitGym Pro{% endblock %}
+
+{% block content %}
+<!-- Welcome Message -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-success welcome-message" role="alert">
+            <h4><i class="fas fa-tachometer-alt me-2"></i>Welcome, {{ session.user_name or session.user }}!</h4>
+            <p class="mb-0">You have successfully logged into your FitGym Pro dashboard. Manage your workout sessions below.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card border-success">
+            <div class="card-body text-center">
+                <i class="fas fa-plus fa-2x text-success mb-2"></i>
+                <h5>Book New Session</h5>
+                <p class="card-text">Schedule your next workout</p>
+                <a href="{{ url_for('book') }}" class="btn btn-success">
+                    <i class="fas fa-plus me-1"></i>Book Now
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-info">
+            <div class="card-body text-center">
+                <i class="fas fa-calendar fa-2x text-info mb-2"></i>
+                <h5>View Schedule</h5>
+                <p class="card-text">Check available time slots</p>
+                <a href="{{ url_for('schedule') }}" class="btn btn-info">
+                    <i class="fas fa-calendar me-1"></i>View Schedule
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-bar fa-2x text-warning mb-2"></i>
+                <h5>My Stats</h5>
+                <p class="card-text">Track your progress</p>
+                <button class="btn btn-warning" disabled>
+                    <i class="fas fa-chart-bar me-1"></i>Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Bookings -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-list me-2"></i>Your Workout Sessions</h5>
+            </div>
+            <div class="card-body">
+                {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-calendar me-1"></i>Date</th>
+                                <th><i class="fas fa-clock me-1"></i>Time</th>
+                                <th><i class="fas fa-hourglass-half me-1"></i>Duration</th>
+                                <th><i class="fas fa-calendar-plus me-1"></i>Booked At</th>
+                                <th><i class="fas fa-info-circle me-1"></i>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>
+                                    <strong>{{ booking.date | date }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% set booking_date = booking.date | strptime('%Y-%m-%d') %}
+                                        {{ booking_date.strftime('%A') }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ booking.time }}</span>
+                                </td>
+                                <td>{{ booking.duration }}</td>
+                                <td>
+                                    <small>{{ booking.booked_at | datetime }}</small>
+                                </td>
+                                <td>
+                                    {% set booking_date = booking.date | strptime('%Y-%m-%d') %}
+                                    {% set today = moment().format('YYYY-MM-DD') | strptime('%Y-%m-%d') if moment else none %}
+                                    {% if booking_date and today %}
+                                        {% if booking_date.date() > today.date() %}
+                                            <span class="badge bg-success">Upcoming</span>
+                                        {% elif booking_date.date() == today.date() %}
+                                            <span class="badge bg-warning">Today</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Completed</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge bg-info">Scheduled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                    <h5>No bookings yet</h5>
+                    <p class="text-muted">You haven't booked any workout sessions yet. Start by booking your first session!</p>
+                    <a href="{{ url_for('book') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>Book Your First Session
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bot Success Indicator (for automated testing) -->
+{% if bookings %}
+<div id="success-indicator" class="mt-4">
+    <div class="alert alert-success success-message" role="alert">
+        <i class="fas fa-robot me-2"></i>
+        <strong>Bot Detection:</strong> Dashboard loaded successfully with {{ bookings|length }} booking(s) found.
+        This message confirms successful login and data retrieval for automated testing.
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add some dynamic content for demonstration
+document.addEventListener('DOMContentLoaded', function() {
+    // Highlight today's sessions
+    const today = new Date().toISOString().split('T')[0];
+    console.log('Dashboard loaded for user: {{ session.user }}');
+    console.log('Total bookings: {{ bookings|length }}');
+});
+</script>
+{% endblock %}
