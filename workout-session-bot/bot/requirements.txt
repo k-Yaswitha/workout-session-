@@ -1,0 +1,28 @@
+# Workout Session Reservation Bot - Python Dependencies
+
+# Web automation
+selenium==4.15.2
+webdriver-manager==4.0.1
+
+# Date/time handling
+python-dateutil==2.8.2
+
+# Email notifications
+secure-smtplib==0.1.1
+
+# Logging and utilities
+colorlog==6.7.0
+
+# Configuration and environment
+python-dotenv==1.0.0
+
+# Data handling
+requests==2.31.0
+
+# Development and testing (optional)
+pytest==7.4.3
+pytest-selenium==4.1.0
+
+# Additional utilities
+fake-useragent==1.4.0
+undetected-chromedriver==3.5.4

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Login - FitGym Pro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4><i class="fas fa-sign-in-alt me-2"></i>Login</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required 
+                               placeholder="Enter your username">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required 
+                               placeholder="Enter your password">
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-muted text-center">
+                <small>
+                    <strong>Demo Credentials:</strong><br>
+                    Username: <code>demo_user</code><br>
+                    Password: <code>demo_password</code>
+                </small>
+            </div>
+        </div>
+        
+        <!-- Bot Testing Info -->
+        <div class="alert alert-info mt-4" role="alert">
+            <h6><i class="fas fa-robot me-2"></i>For Bot Testing</h6>
+            <p class="mb-2">This login form is designed to work with the Workout Session Reservation Bot.</p>
+            <ul class="mb-0">
+                <li><strong>Username field:</strong> <code>name="username"</code></li>
+                <li><strong>Password field:</strong> <code>name="password"</code></li>
+                <li><strong>Submit button:</strong> <code>type="submit"</code></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
